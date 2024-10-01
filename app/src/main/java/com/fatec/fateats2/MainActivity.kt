@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fatec.fateats2.dao.ProductDao
 import com.fatec.fateats2.model.Product
 import com.fatec.fateats2.sampledata.sampleCandies
 import com.fatec.fateats2.sampledata.sampleProducts
@@ -42,6 +43,8 @@ import com.fatec.fateats2.ui.theme.Fateats2Theme
 import java.math.BigDecimal
 
 class MainActivity : ComponentActivity() {
+    private val dao = ProductDao()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -81,9 +84,9 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier.padding(innerPadding)
                 ) {
-                    HomeScreen()
+                    val products = dao.products()
+                    HomeScreen(products = sampleProducts )
                 }
-
             }
         }
     }
