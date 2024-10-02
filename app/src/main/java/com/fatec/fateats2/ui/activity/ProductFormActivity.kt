@@ -158,6 +158,11 @@ fun ProductFormScreen(
                 imeAction = ImeAction.Next
             )
         )
+
+        PriceField(
+            price= price,
+            onPriceChange= {  price=it }
+        )
         var description by remember {
             mutableStateOf("")
         }
@@ -200,6 +205,21 @@ fun ProductFormScreen(
         }
         Spacer(modifier = Modifier)
     }
+}
+
+@Composable
+fun PriceField(
+    price: String,
+    onPriceChange: (String) -> Unit,
+) {
+    TextField(
+        value = price,
+        onValueChange = onPriceChange,
+        label = { Text("Preço") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        modifier = Modifier
+            .fillMaxWidth()
+    )
 }
 
 
