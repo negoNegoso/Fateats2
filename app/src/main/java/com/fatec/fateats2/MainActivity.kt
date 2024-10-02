@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,71 +40,56 @@ import com.fatec.fateats2.ui.components.ProductsSection
 import com.fatec.fateats2.ui.components.SearchTextField
 import com.fatec.fateats2.ui.components.SearchTextFieldPreview
 import com.fatec.fateats2.ui.screens.HomeScreen
+import com.fatec.fateats2.ui.screens.HomeScreenUiState
 import com.fatec.fateats2.ui.theme.Fateats2Theme
 import java.math.BigDecimal
 
 class MainActivity : ComponentActivity() {
+
     private val dao = ProductDao()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            App(
-                onFabClick = {
-                    startActivity(
-                        Intent(
-                            this,
-                            ProductFormActivity::class.java
-                        )
+            App(onFabClick = {
+                startActivity(
+                    Intent(
+                        this,
+                        ProductFormActivity::class.java
                     )
-                }
-            )
-        }
-    }
-
-    @Composable
-    private fun App(
-        onFabClick: () -> Unit = {},
-    ) {
-        Fateats2Theme {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = onFabClick
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null
-                        )
-                    }
-                }
-            )
-            { innerPadding ->
-                Box(
-                    modifier = Modifier.padding(innerPadding)
-                ) {
-                    val products = dao.products()
-                    HomeScreen(products = sampleProducts )
-                }
+                )
+            }) {
+                val products = dao.products()
+                HomeScreen(products = products)
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun App(
+    onFabClick: () -> Unit = {},
+    content: @Composable () -> Unit = {},
+) {
+    Fateats2Theme {
+        Surface {
+            Scaffold(floatingActionButton = {
+                FloatingActionButton(onClick = onFabClick) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                }
+            }) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    content()
+                }
+            }
+        }
+    }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun GreetingPreview() {
-    Fateats2Theme {
-        Greeting("Android")
+fun AppPreview() {
+    App {
+        HomeScreen(HomeScreenUiState(sections = sampleSections))
     }
 }
