@@ -182,7 +182,7 @@ fun HomeScreen(state: HomeScreenUiState) {
                         item {
                             ProductsSection(
                                 title = title,
-                                products = product
+                                products = product,
                             )
                         }
                     }
