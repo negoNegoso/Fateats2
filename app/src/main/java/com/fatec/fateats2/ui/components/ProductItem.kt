@@ -3,6 +3,7 @@ package com.fatec.fateats2.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -91,12 +92,19 @@ fun ProductItem(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
+                Text(
+                    text = "Código: "+product.id.toString(),
+                    fontSize = 12.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(end = 4.dp)
+                )
 
                 Text(
                     text = product.price.toBrazilianCurrency(),
                     modifier = Modifier.padding(top = 8.dp),
                     fontSize = 14.sp,
-                    fontWeight =  FontWeight.Bold
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
