@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     val products = dao.products()
-                    HomeScreen(products = sampleProducts )
+                    HomeScreen(products = products )
                 }
             }
         }

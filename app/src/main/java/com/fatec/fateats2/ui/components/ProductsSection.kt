@@ -42,7 +42,7 @@ fun ProductsSection(
     Column(
         modifier = modifier
     ) {
-        var showSection by remember { mutableStateOf(false) }
+        var showSection by remember { mutableStateOf(true) }
 
         if (showSection) {
             Row(
