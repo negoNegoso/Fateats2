@@ -43,12 +43,15 @@ import java.math.BigDecimal
 @Composable
 fun ProductItem(
     product: Product,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickProductItem:()->Unit ={}
 ) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.elevatedCardElevation(4.dp)
+        elevation = CardDefaults.elevatedCardElevation(4.dp),
+        onClick  = onClickProductItem
+
     ) {
         Column(
             modifier = Modifier

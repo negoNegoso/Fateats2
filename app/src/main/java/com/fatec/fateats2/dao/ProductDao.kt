@@ -13,5 +13,9 @@ class ProductDao {
     fun save(product: Product){
         products.add(product)
     }
+    // Função para recuperar um produto pela sua ID
+    fun getProductById(id: Int): Product? {
+        return products.find { it.id == id }
+    }
 
 }

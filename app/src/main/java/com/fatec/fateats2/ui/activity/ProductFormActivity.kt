@@ -49,6 +49,8 @@ import com.fatec.fateats2.ui.components.CustomTopAppBar
 import com.fatec.fateats2.ui.screens.HomeScreen
 import com.fatec.fateats2.ui.theme.Fateats2Theme
 import java.math.BigDecimal
+import java.util.UUID
+import kotlin.random.Random
 
 class ProductFormActivity : ComponentActivity() {
 
@@ -58,14 +60,30 @@ class ProductFormActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val productId = intent.getIntExtra("productId",0)
+            Log.i("productId", productId.toString())
             Fateats2Theme {
                 Surface {
-                    ProductFormScreen(
-                        onSaveClick = { product ->
-                            dao.save(product = product)
-                            finish()
-                        }
-                    )
+
+                    val productParam = dao.getProductById(productId) ?: producDefault()
+                    Log.i("productParam", dao.getProductById(productId).toString())
+                    if(productId !=0){
+                        ProductFormScreen(
+                            onSaveClick = { product ->
+                                dao.save(product = product)
+                                finish()
+                            },
+                            product = productParam
+                        )
+                    }else{
+                        ProductFormScreen(
+                            onSaveClick = { product ->
+                                dao.save(product = product)
+                                finish()
+                            }
+                        )
+                    }
+
                 }
             }
         }
@@ -73,7 +91,10 @@ class ProductFormActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
+fun ProductFormScreen(
+    onSaveClick: (Product) -> Unit = {},
+    product: Product = producDefault()
+) {
     Column {
         CustomTopAppBar(title = "CADASTRO DE PRODUTO")
         Column(
@@ -85,7 +106,7 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
         ) {
             Spacer(modifier = Modifier.padding(6.dp))
             var url by remember {
-                mutableStateOf("")
+                mutableStateOf(product.image.toString())
             }
 
             if (url.isNotBlank()) {
@@ -115,7 +136,7 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
                     capitalization = KeyboardCapitalization.Words
                 )
             )
-            var name by remember { mutableStateOf("") }
+            var name by remember { mutableStateOf(product.name) }
             TextField(
                 value = name,
                 onValueChange = {
@@ -134,7 +155,7 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
             val formatter = remember {
                 DecimalFormat("#.##")
             }
-            var price by remember { mutableStateOf("") }
+            var price by remember { mutableStateOf(product.price.toString()) }
             TextField(
                 value = price,
                 onValueChange = {
@@ -157,7 +178,7 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
                 )
             )
 
-            var descripton by remember { mutableStateOf("") }
+            var descripton by remember { mutableStateOf(product.description.toString()) }
             TextField(
                 value = descripton,
                 onValueChange = {
@@ -185,6 +206,7 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
                     }
 
                     val product = Product(
+                        id=  Random(seed = 1234).nextInt() ,
                         name = name,
                         image = url,
                         price = convertedPrice,
@@ -199,6 +221,11 @@ fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
         }
     }
 }
+
+fun producDefault() = Product(name = "",
+    image = "",
+    price = BigDecimal.ZERO,
+    description = "")
 
 @Preview
 @Composable
